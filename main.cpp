@@ -1,5 +1,9 @@
 #include <iostream>
-#include <stdlib.h>
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 #include "bignumber.h"
 
 using namespace std;
@@ -24,7 +28,7 @@ int typeInput = 0;	//1 - бинарный
 //2 - дестичный
 //3 - шеснадцатиричный
 
-//Функция переворачивает строку задам на перед
+//Функция переворачивает строку
 void strrev(char *str1)
 {
 	char *str2;
@@ -73,7 +77,7 @@ int checkNumber(char *strNumber)
 	if((strlen(strNumber) > 1)&&(strNumber[0] == 'b'))
 	{
 		cout << "You input binary number"<< endl;
-		for(int i=1; i<strlen(strNumber); i++)
+		for(unsigned int i=1; i<strlen(strNumber); i++)
 		{
 			if (!((strNumber[i] == '0')||(strNumber[i] == '1')))
 			{
@@ -88,7 +92,7 @@ int checkNumber(char *strNumber)
 		if( (strlen(strNumber) > 2) && ((strNumber[0] == '0')&&(strNumber[1] == 'x')) )
 		{
 		cout << "You input hex number"<< endl;
-		for(int i=2; i<strlen(strNumber); i++)
+		for(unsigned int i=2; i<strlen(strNumber); i++)
 		{
 			if(isxdigit(strNumber[i]) == 0)
 			{
@@ -101,7 +105,7 @@ int checkNumber(char *strNumber)
 	}
 	else
 	{
-		for(int i=0; i<strlen(strNumber); i++)
+		for(unsigned int i=0; i<strlen(strNumber); i++)
 		{
 			if(isdigit(strNumber[i]) == 0)
 			{
@@ -124,7 +128,7 @@ void printNumbers()
 
 int main(int argc, char *argv[])
 {
-	cout << "Hello, convertor" << endl;
+	cout << "Hello, number convertor" << endl;
 	//cout << "sizeof=" << sizeof(long long int) << endl;
 /*
 	{
@@ -334,7 +338,7 @@ int main(int argc, char *argv[])
 					//fprintf(stdout, "iii=%d ddd=%d off1=%d\n", iii, ddd, off1);
 					if(ddd == 1)
 					{
-						BigNumber num_2("2");
+						BigNumber num_2((char*)"2");
 						num_res1 = num_2^off1;
 						//num_res1.print();
 						num_res = num_res + num_res1;
@@ -386,7 +390,7 @@ int main(int argc, char *argv[])
 
 					char numBin1[MAX_MASS];
 
-					int iii;
+					unsigned int iii;
 					for(iii = 0; iii<strlen(numBin); iii++)
 					{
 						numBin1[iii] = numBin[strlen(numBin) - iii - 1];
@@ -528,7 +532,7 @@ int main(int argc, char *argv[])
 					{
 						BigNumber num_res3;
 						BigNumber num_res2(ddd);
-						BigNumber num_16("16");
+						BigNumber num_16((char *)"16");
 						num_res1 = num_16^off1;
 						num_res3 = num_res2*num_res1;
 						num_res = num_res + num_res3;

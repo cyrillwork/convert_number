@@ -73,7 +73,7 @@ void printBinNumber(long long int num)
 
 int checkNumber(char *strNumber)
 {
-	cout << "check number: "<< strNumber << endl;
+    //cout << "check number: "<< strNumber << endl;
 	if((strlen(strNumber) > 1)&&(strNumber[0] == 'b'))
 	{
 		cout << "You input binary number"<< endl;
@@ -128,60 +128,15 @@ void printNumbers()
 
 int main(int argc, char *argv[])
 {
-	cout << "Hello, number convertor" << endl;
-	//cout << "sizeof=" << sizeof(long long int) << endl;
-/*
-	{
-		char str1[10] = "12";
-		//str1[0] = 0;
-		//str1[1] = '1';
-		//str1[2] = '2';
-		printf("str1=%s\n", str1);
-		printf("str1[0]=%c\n", str1[0]);
-		printf("str1[1]=%c\n", str1[1]);
-		printf("str1[2]=%c\n", str1[2]);
-
-	}
-*/
-
-	{//test
-/*
-				int ddd1 = 12345;
-				BigNumber bbb1(ddd1);
-				bbb1.print();
-*/
-/*
-				BigNumber bbb1("11");
-		BigNumber bbb2("22");
-		BigNumber bbb = bbb1 * bbb2;
-		bbb.print();
-
-				printf("size bbb=%d\n", bbb.size());
-		BigNumber bbb3_1("2");
-
-				BigNumber bbb4("10");
-				bbb4 = bbb4 + bbb3_1^ddd;
-
-				bbb4.print();
-		printf("size bbb4=%d\n", bbb4.size());
-
-		BigNumber bbb4;
-		BigNumber bbb3_1("260");
-
-
-		bbb4 = bbb3_1/4;
-
-		bbb4.print();
-		printf("ost=%d\n", bbb3_1%4);
-*/
-		//return 0;
-	}
+    cout << "Number convertor" << endl;
 
 	if(argc != 2)
 	{
 		cout << "!!! Error input" << endl;
-		cout << "Usage: convertor [number]" << endl;
-	}
+        cout << "Usage: convertor [number]" << endl;
+        cout << "Number format: dec - [1..9], bin [b0..1], hex [0x1..f]" << endl;
+        cout << "Max size number 30 symbols" << endl;
+    }
 	else
 	{
 		if(strlen(argv[1]) > 30)
@@ -195,20 +150,19 @@ int main(int argc, char *argv[])
 			return 0;
 		}
 
+        //cout << "typeInput=" << typeInput << endl;
+
 		switch(typeInput)
 		{
 			case TYPE_BIN:
 			{
-
 				char *ptr1 = argv[1]  + 1;
 				strcpy(numBin, ptr1);
 				int countHex = strlen(ptr1)/4;
 				int addHex = strlen(ptr1) - countHex*4;
-				//printf("strlen(ptr1)=%d\n", strlen(ptr1));
-				//printf("countHex=%d\n", countHex);
-				//printf("addHex=%d\n", addHex);
 				int indexHex = 2;
-				memset(numHex, 0, sizeof(numHex));
+
+                memset(numHex, 0, sizeof(numHex));
 				numHex[0] = '0';
 				numHex[1] = 'x';
 
@@ -229,7 +183,7 @@ int main(int argc, char *argv[])
 				for(int iii = 0; iii < countHex; iii++)
 				{
 					int index = 4*iii;
-					char str1[5];
+                    char str1[16];
 					memset(str1, 0, 5);
 					//printf("index=%d\n", index);
 					strncpy(str1, ptr1 + index, 4);
@@ -361,17 +315,21 @@ int main(int argc, char *argv[])
 				strcpy(numDec, ptr1);
 
 				{ //set bin number
-					BigNumber num1(ptr1);
+                    BigNumber num1(numDec);
 					BigNumber num2;
 
 					int currBin = 0;
 					numBin[currBin] = 0;
 					currBin++;
 
-					for(;;)			//for(int iii = strlen(ptr1)-1; iii >= 2; iii--)
+                    for(;;)
 					{
+                        //cout << "num1 = ";
+                        //num1.print();
+
 						num2 = num1/2;
 						ost = num1%2;
+
 						if(ost)
 						{
 							strcat(numBin, "1");
@@ -380,8 +338,12 @@ int main(int argc, char *argv[])
 						{
 							strcat(numBin, "0");
 						}
+
 						currBin++;
-						if(num2.size() == 0)
+                        //cout << "currBin=" << currBin  << endl;
+                        //cout << "numBin=" << numBin  << endl;
+                        //cout << "num2size=" << num2.size()  << endl;
+                        if(num2.size() == 0)
 						{
 							break;
 						}
@@ -410,7 +372,7 @@ int main(int argc, char *argv[])
 						char str2[8];
 						num2 = num1/16;
 						ost = num1%16;
-						if(ost>9)
+                        if(ost > 9)
 						{
 							char str1[] = {'a', 'b', 'c', 'd', 'e', 'f'};
 							sprintf(str2, "%c", str1[ost - 10]);

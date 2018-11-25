@@ -128,7 +128,7 @@ void printNumbers()
 
 int main(int argc, char *argv[])
 {
-    cout << "Number convertor" << endl;
+    cout << "Big number convertor" << endl;
 
 	if(argc != 2)
 	{

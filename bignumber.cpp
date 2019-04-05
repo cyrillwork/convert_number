@@ -37,6 +37,26 @@ BigNumber::BigNumber(int numb)
     }
 }
 
+BigNumber::BigNumber(const BigNumber&v1)
+{
+    count_num = v1.count_num;
+    pNumber = new int[count_num];
+    for(int iii = 0; iii < count_num; iii++)
+    {
+        pNumber[iii] = v1.pNumber[iii];
+    }
+}
+
+BigNumber::BigNumber(int*b1, int c)
+{
+    this->count_num = c;
+    pNumber = new int[count_num];
+    for(int iii = 0; iii < this->count_num; iii++)
+    {
+        pNumber[iii] = b1[iii];
+    }
+}
+
 BigNumber::~BigNumber()
 {
     delete []pNumber;

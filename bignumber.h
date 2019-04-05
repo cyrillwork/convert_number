@@ -15,7 +15,7 @@ class BigNumber
 public:
     BigNumber() {}
 
-    BigNumber(char *str1);
+    BigNumber(const string& str1);
 
     BigNumber(int numb);
 
@@ -45,9 +45,15 @@ public:
         return pNumber[i];
     }
 
-    friend BigNumber& operator+(const BigNumber &v1, const BigNumber &v2);
+    friend const BigNumber& operator+(const BigNumber &v1, const BigNumber &v2);
+
+    const BigNumber& operator += (const BigNumber &v1);
+
+   // const BigNumber& operator + (const BigNumber &v1);
 
     friend BigNumber operator/(const BigNumber &v1, const int &n);
+
+    friend ostream& operator << (ostream &s, const BigNumber &b);
 
     friend int operator%(const BigNumber &v1, const int &n);
 

@@ -1,15 +1,17 @@
 #include "bignumber.h"
 
-BigNumber::BigNumber(char *str1)
+BigNumber::BigNumber(const string&str1)
 {
-    if(!str1) return;
-    int len = strlen(str1);
+    if(str1.size() == 0) return;
+
+    int len = str1.size();
 
     count_num = 0;
 
     if(len > 0)
     {
         count_num = len;
+
         pNumber = new int[count_num];
 
         for(int iii = 0; iii<count_num; iii++)
@@ -101,6 +103,19 @@ void BigNumber::setString(char *str1)
     *(str1 + iii) = 0;
 }
 
+//Перегрузка операции вывода в поток
+ostream& operator << (ostream &s, const BigNumber &b)
+{
+    int len = b.count_num;
+
+    for(int iii = 0; iii<len; iii++)
+    {
+        s << b.pNumber[len - iii - 1];
+    }
+
+    return s;
+}
+
 void BigNumber::print()
 {
     //printf("print this=%p count=%d\n", this, count);
@@ -155,12 +170,20 @@ BigNumber& BigNumber::operator*(BigNumber const &v1)
 
 BigNumber& BigNumber::operator=(BigNumber const &v1)
 {
+    if((this->count_num == v1.count_num) && (this->pNumber == v1.pNumber))
+    {
+        return *this;
+    }
+
     this->count_num = v1.count_num;
+
     if(this->pNumber)
     {
         delete []this->pNumber;
     }
+
     this->pNumber = new int[this->count_num];
+
     for(int iii = 0; iii < count_num; iii++)
     {
         this->pNumber[iii] = v1.pNumber[iii];
@@ -237,60 +260,13 @@ int operator%(BigNumber const &v1, int const &n)
     return ost;
 }
 
-BigNumber& operator+(BigNumber const &v1, BigNumber const &v2)
+const BigNumber& operator+(BigNumber const &v1, BigNumber const &v2)
 {
-    BigNumber *res = new BigNumber();
+    BigNumber temp = v1;
 
-    int len = 0;
-    int *arr1;
-    int *arr2;
+    temp += v2;
 
-    if(v2.count_num > v1.count_num)
-    {
-        len = v2.count_num + 1;
-    }
-    else
-    {
-        len = v1.count_num + 1;
-    }
-
-    arr1 = new int[len];
-    arr2 = new int[len];
-
-    for(int iii=0; iii<len; iii++)
-    {
-        arr1[iii] = 0;
-        arr2[iii] = 0;
-    }
-
-    for(int iii=0; iii<v2.count_num; iii++)
-    {
-        arr1[iii] = v2.pNumber[iii];
-    }
-    for(int iii=0; iii<v1.count_num; iii++)
-    {
-        arr2[iii] = v1.pNumber[iii];
-    }
-    for(int ix=0; ix<len; ix++)
-    {
-        arr1[ix] += arr2[ix];
-        arr1[ix + 1] += (arr1[ix]/10);
-        arr1[ix] %= 10;
-    }
-
-    if(arr1[len - 1] == 0)
-    {
-        len--;
-    }
-
-
-    res->setData(arr1, len);
-
-    delete []arr1;
-    delete []arr2;
-
-
-    return *res;
+    return *(new BigNumber(temp));
 }
 
 BigNumber& BigNumber::operator^(int range)
@@ -332,3 +308,58 @@ BigNumber& BigNumber::operator^(int range)
 
     return *this;
 }
+
+const BigNumber& BigNumber::operator += (const BigNumber&v1)
+{
+    BigNumber &v2 = *this;
+
+    int len = 0;
+    int *arr1;
+    int *arr2;
+
+    if(v2.count_num > v1.count_num)
+    {
+        len = v2.count_num + 1;
+    }
+    else
+    {
+        len = v1.count_num + 1;
+    }
+
+    arr1 = new int[len];
+    arr2 = new int[len];
+
+    for(int iii=0; iii<len; ++iii)
+    {
+        arr1[iii] = 0;
+        arr2[iii] = 0;
+    }
+
+    for(int iii=0; iii<v2.count_num; ++iii)
+    {
+        arr1[iii] = v2.pNumber[iii];
+    }
+    for(int iii=0; iii<v1.count_num; ++iii)
+    {
+        arr2[iii] = v1.pNumber[iii];
+    }
+    for(int ix=0; ix<len; ix++)
+    {
+        arr1[ix] += arr2[ix];
+        arr1[ix + 1] += (arr1[ix]/10);
+        arr1[ix] %= 10;
+    }
+
+    if(arr1[len - 1] == 0)
+    {
+        --len;
+    }
+
+    setData(arr1, len);
+
+    delete []arr1;
+    delete []arr2;
+
+    return *this;
+}
+

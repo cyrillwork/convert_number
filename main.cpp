@@ -16,17 +16,16 @@ char numDec[MAX_MASS];
 char numBin[MAX_MASS];
 
 //тип введеного числа
-enum
+enum class TypeNumbSystem
 {
+	TYPE_NONE = 0,
 	TYPE_BIN = 1,       // бинарный
 	TYPE_DEC,           // дестичный
 	TYPE_HEX            // шеснадцатиричный
 };
 
 //тип введеного числа
-int typeInput = 0;	//1 - бинарный
-//2 - дестичный
-//3 - шеснадцатиричный
+TypeNumbSystem typeInput = TypeNumbSystem::TYPE_NONE;
 
 //Функция переворачивает строку
 void strrev(char *str1)
@@ -86,7 +85,7 @@ int checkNumber(char *strNumber)
 				return -1;
 			}
 		}
-		typeInput = TYPE_BIN;
+		typeInput = TypeNumbSystem::TYPE_BIN;
 	}
 	else
 		if( (strlen(strNumber) > 2) && ((strNumber[0] == '0')&&(strNumber[1] == 'x')) )
@@ -101,7 +100,7 @@ int checkNumber(char *strNumber)
 				return -1;
 			}
 		}
-		typeInput = TYPE_HEX;
+		typeInput = TypeNumbSystem::TYPE_HEX;
 	}
 	else
 	{
@@ -114,7 +113,7 @@ int checkNumber(char *strNumber)
 				return -1;
 			}
 		}
-		typeInput = TYPE_DEC;
+		typeInput = TypeNumbSystem::TYPE_DEC;
 	}
 	return 0;
 }
@@ -129,6 +128,14 @@ void printNumbers()
 int main(int argc, char *argv[])
 {
     cout << "Big number convertor" << endl;
+
+//    {
+//        cout << "Test Big number" << endl;
+//        BigNumber b1 = {"1000"};
+//        b1 += 100;
+//        b1 = b1 + 100;
+//        cout << b1 << endl;
+//    }
 
 	if(argc != 2)
 	{
@@ -154,7 +161,10 @@ int main(int argc, char *argv[])
 
 		switch(typeInput)
 		{
-			case TYPE_BIN:
+			case TypeNumbSystem::TYPE_NONE:
+			break;
+
+			case TypeNumbSystem::TYPE_BIN:
 			{
 				char *ptr1 = argv[1]  + 1;
 				strcpy(numBin, ptr1);
@@ -307,7 +317,7 @@ int main(int argc, char *argv[])
 			}
 			break;
 
-			case TYPE_DEC:
+			case TypeNumbSystem::TYPE_DEC:
 			{
 				int ost = 0;
 				char *ptr1 = argv[1];
@@ -407,7 +417,7 @@ int main(int argc, char *argv[])
 			}
 			break;
 
-			case TYPE_HEX:
+			case TypeNumbSystem::TYPE_HEX:
 			{
 				char *ptr1 = argv[1];
 				strcpy(numHex, ptr1);

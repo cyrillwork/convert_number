@@ -13,8 +13,7 @@ using namespace std;
 class BigNumber
 {
 public:
-
-    BigNumber() : pNumber(nullptr), count_num(0) {}
+    BigNumber() {}
 
     BigNumber(char *str1);
 
@@ -53,9 +52,7 @@ public:
     friend int operator%(const BigNumber &v1, const int &n);
 
 private:
-
-    int count_num;
-
+    int count_num = 0;
     int *pNumber = nullptr;
 };
 

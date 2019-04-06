@@ -130,11 +130,12 @@ int main(int argc, char *argv[])
     cout << "Big number convertor" << endl;
 
 //    {
-//        cout << "Test Big number" << endl;
-//        BigNumber b1 = {"1000"};
-//        b1 += 100;
-//        b1 = b1 + 100;
-//        cout << b1 << endl;
+//			cout << "Test Big number" << endl;
+//			BigNumber b1 = {"1000"};
+//			b1 += 100;
+//			b1 = b1 + 100;
+//			cout << b1 << endl;
+//			return 0;
 //    }
 
 	if(argc != 2)

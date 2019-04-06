@@ -168,31 +168,28 @@ BigNumber& BigNumber::operator*(BigNumber const &v1)
     return *this;
 }
 
-BigNumber& BigNumber::operator=(BigNumber const &v1)
+BigNumber& BigNumber::operator = (BigNumber const &v1)
 {
-    if((this->count_num == v1.count_num) && (this->pNumber == v1.pNumber))
-    {
-        return *this;
-    }
-
-    this->count_num = v1.count_num;
-
-    if(this->pNumber)
-    {
-        delete []this->pNumber;
-    }
-
-    this->pNumber = new int[this->count_num];
-
-    for(int iii = 0; iii < count_num; iii++)
-    {
-        this->pNumber[iii] = v1.pNumber[iii];
-    }
-
-    return *this;
+	if(this != &v1)
+	{
+		this->count_num = v1.count_num;
+		
+		if(this->pNumber)
+		{
+			delete []this->pNumber;
+		}
+		
+		this->pNumber = new int[this->count_num];
+		
+		for(int iii = 0; iii < count_num; iii++)
+		{
+			this->pNumber[iii] = v1.pNumber[iii];
+		}
+	}
+	return *this;
 }
 
-BigNumber operator/(BigNumber const &v1, int const &n)
+BigNumber operator / (BigNumber const &v1, int const &n)
 {
     int len;
     int *arr1;
@@ -260,13 +257,10 @@ int operator%(BigNumber const &v1, int const &n)
     return ost;
 }
 
-const BigNumber& operator+(BigNumber const &v1, BigNumber const &v2)
+BigNumber  operator + (BigNumber const &v1, BigNumber const &v2)
 {
     BigNumber temp = v1;
-
-    temp += v2;
-
-    return *(new BigNumber(temp));
+    return temp += v2;
 }
 
 BigNumber& BigNumber::operator^(int range)

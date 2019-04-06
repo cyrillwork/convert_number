@@ -45,7 +45,7 @@ public:
         return pNumber[i];
     }
 
-    friend const BigNumber& operator+(const BigNumber &v1, const BigNumber &v2);
+    friend BigNumber operator+(const BigNumber &v1, const BigNumber &v2);
 
     const BigNumber& operator += (const BigNumber &v1);
 

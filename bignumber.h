@@ -13,7 +13,7 @@ using namespace std;
 class BigNumber
 {
 public:
-    BigNumber() {}
+    BigNumber() = default;
 
     BigNumber(const string& str1);
 
@@ -23,6 +23,7 @@ public:
 
     BigNumber(int *b1, int c);
 
+    BigNumber(BigNumber && b) { swap(b); }
 
     ~BigNumber();
 
@@ -30,13 +31,19 @@ public:
 
     void setString(char *str1);
 
-    void print();
+    void print() const;
 
     int size() { return count_num; }
 
     BigNumber& operator*(BigNumber const &v1);
 
     BigNumber& operator=(BigNumber const &v1);
+
+    BigNumber& operator=(BigNumber && b)
+    {
+        swap(b);
+        return *this;
+    }
 
     BigNumber& operator^(int range);
 
@@ -45,11 +52,15 @@ public:
         return pNumber[i];
     }
 
-    friend BigNumber operator+(const BigNumber &v1, const BigNumber &v2);
+    void swap(BigNumber &b)
+    {
+        std::swap(count_num, b.count_num);
+        std::swap(pNumber, b.pNumber);
+    }
 
     const BigNumber& operator += (const BigNumber &v1);
 
-   // const BigNumber& operator + (const BigNumber &v1);
+    friend BigNumber operator+(const BigNumber &v1, const BigNumber &v2);
 
     friend BigNumber operator/(const BigNumber &v1, const int &n);
 

@@ -29,7 +29,7 @@ BigNumber::BigNumber(int numb)
     str1[0] = 0;
     sprintf(str1, "%d", numb);
 
-    count_num = strlen(str1);
+    count_num = static_cast<int>(strlen(str1));
     pNumber = new int[count_num];
 
     for(int iii = 0; iii<count_num; iii++)
@@ -74,7 +74,7 @@ void BigNumber::setData(int *ptr, int len)
         delete []pNumber;
     }
 
-    pNumber = NULL;
+    pNumber = nullptr;
 
     if(len > 0)
     {
@@ -95,7 +95,7 @@ void BigNumber::setString(char *str1)
     //printf("count=%d\n", this->count);
     for(iii = 0; iii<this->count_num; iii++)
     {
-        char ch1 = pNumber[this->count_num - iii - 1] + 48;
+        char ch1 = static_cast<char>(pNumber[this->count_num - iii - 1] + 48);
         //printf("ch1=%c \n", ch1);
         *(str1 + iii) = ch1;
     }
@@ -116,7 +116,7 @@ ostream& operator << (ostream &s, const BigNumber &b)
     return s;
 }
 
-void BigNumber::print()
+void BigNumber::print() const
 {
     //printf("print this=%p count=%d\n", this, count);
 
@@ -265,12 +265,12 @@ BigNumber  operator + (BigNumber const &v1, BigNumber const &v2)
 
 BigNumber& BigNumber::operator^(int range)
 {
-    BigNumber *aaa = NULL;
-    BigNumber *bbb = NULL;
+    BigNumber *aaa = nullptr;
+    BigNumber *bbb = nullptr;
 
     if(range == 0)
     {
-        aaa = new BigNumber((char*)"1");
+        aaa = new BigNumber("1");
         this->setData(aaa->pNumber, aaa->count_num);
     }
     else
@@ -282,7 +282,7 @@ BigNumber& BigNumber::operator^(int range)
             //printf("range=%d\n", range);
             for(int iii=0; iii<(range-1); iii++)
             {
-                if(aaa != NULL)
+                if(aaa)
                 {
                     delete aaa;
                 }

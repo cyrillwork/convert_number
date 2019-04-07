@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <algorithm>
 
 #include "bignumber.h"
 
@@ -26,29 +27,6 @@ enum class TypeNumbSystem
 
 //тип введеного числа
 TypeNumbSystem typeInput = TypeNumbSystem::TYPE_NONE;
-
-//Функция переворачивает строку
-void strrev(char *str1)
-{
-	char *str2;
-
-	if(!str1)
-	{
-		return;
-	}
-	int len = strlen(str1);
-	str2 = (char*)malloc(len + 1);
-
-	int iii;
-	for(iii = 0; iii<len; iii++)
-	{
-		str2[iii] = str1[len - iii - 1];
-	}
-	str2[iii] = 0;
-	strcpy(str1, str2);
-
-	free(str2);
-}
 
 //Функция вывода на печать числа в двоичной системе счисления
 void printBinNumber(long long int num)
@@ -130,12 +108,20 @@ int main(int argc, char *argv[])
     cout << "Big number convertor" << endl;
 
 //    {
-//			cout << "Test Big number" << endl;
-//			BigNumber b1 = {"1000"};
-//			b1 += 100;
-//			b1 = b1 + 100;
-//			cout << b1 << endl;
-//			return 0;
+//            cout << "Test Big number" << endl;
+//            BigNumber b1 = {1000};
+//            BigNumber c1;
+
+//            b1 += 100;
+//            b1 = b1 + 100;
+
+//            cout << b1 << endl;
+//            c1 = std::move(b1);
+
+//            cout << "b1 =  " << b1 << endl;
+//            cout << "c1 =  " << c1 << endl;
+
+//            return 0;
 //    }
 
 	if(argc != 2)
@@ -400,19 +386,7 @@ int main(int argc, char *argv[])
 						}
 						num1 = num2;
 					}
-
-					strrev(numHex);
-					/*
-					char numHex1[MAX_MASS];
-
-					int iii;
-					for(iii = 0; iii<strlen(numHex); iii++)
-					{
-						numBin1[iii] = numBin[strlen(numBin) - iii - 1];
-					}
-					numBin1[iii] = 0;
-					strcpy(numBin, numBin1);
-					*/
+                    std::reverse(numHex, numHex + strlen(numHex));
 				}
 
 			}

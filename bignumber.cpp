@@ -108,6 +108,11 @@ ostream& operator << (ostream &s, const BigNumber &b)
 {
     int len = b.count_num;
 
+    if(len == 0)
+    {
+        s << len;
+    }
+
     for(int iii = 0; iii<len; iii++)
     {
         s << b.pNumber[len - iii - 1];
@@ -303,6 +308,18 @@ BigNumber& BigNumber::operator^(int range)
     return *this;
 }
 
+const BigNumber &BigNumber::operator ++()
+{
+    return *this += 1;
+}
+
+const BigNumber BigNumber::operator ++(int)
+{
+    BigNumber temp = *this;
+    *this += 1;
+    return temp;
+}
+
 const BigNumber& BigNumber::operator += (const BigNumber&v1)
 {
     BigNumber &v2 = *this;
@@ -357,3 +374,51 @@ const BigNumber& BigNumber::operator += (const BigNumber&v1)
     return *this;
 }
 
+bool operator !=(const BigNumber &v1, const BigNumber &v2)
+{
+    return !(v1 == v2);
+}
+
+bool operator >=(const BigNumber &v1, const BigNumber &v2)
+{
+    return !(v1 < v2);
+}
+
+bool operator <=(const BigNumber &v1, const BigNumber &v2)
+{
+    return !(v1 > v2);
+}
+
+bool operator ==(const BigNumber &v1, const BigNumber &v2)
+{
+    return !(v1 < v2 || v1 > v2);
+}
+
+bool operator <(const BigNumber &v1, const BigNumber &v2)
+{
+    bool result = false;
+    if(v1.count_num == v2.count_num)
+    {
+        int len = v1.count_num - 1;
+        while(len >= 0)
+        {
+            if(v1.pNumber[len] != v2.pNumber[len])
+            {
+                result = v1.pNumber[len] < v2.pNumber[len];
+                break;
+            }
+            --len;
+        }
+    }
+    else
+    if(v1.count_num < v2.count_num)
+    {
+        result = true;
+    }
+    return result;
+}
+
+bool operator > (const BigNumber &v1, const BigNumber &v2)
+{
+    return v2 < v1;
+}

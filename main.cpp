@@ -103,26 +103,53 @@ void printNumbers()
 	printf("hex = %s\n", numHex);
 }
 
+void testBigNumber()
+{
+    cout << "Test Big number" << endl;
+    BigNumber a1 = {226};
+    BigNumber aa1 = {226};
+    BigNumber b1 = {1000};
+    BigNumber c1;
+
+    b1 += 100;
+    b1 = b1 + 100;
+
+    cout << b1 << endl;
+    c1 = std::move(b1);
+    c1 += 1026;
+
+    cout << "a1 =  " << a1 << endl;
+    cout << "aa1 =  " << aa1 << endl;
+    cout << "b1 =  " << b1 << endl;
+    cout << "c1 =  " << c1 << endl;
+
+    cout << std::boolalpha;
+    cout << "a1<c1 =  " << (a1 < c1) << endl;
+    cout << "a1>c1 =  " << (a1 > c1) << endl;
+    cout << "a1==c1 =  " << (a1 == c1) << endl;
+    cout << "a1==aa1 =  " << (a1 == aa1) << endl;
+    cout << "a1!=aa1 =  " << (a1 != aa1) << endl;
+    cout << "a1!=c1 =  " << (a1 != c1) << endl;
+    cout << "a1>=c1 =  " << (a1 >= c1) << endl;
+    cout << "a1<=c1 =  " << (a1 <= c1) << endl;
+    cout << "a1<=aa1 =  " << (a1 <= aa1) << endl;
+
+    cout << "++c1 =  " << ++c1 << endl;
+
+    c1++;
+
+    cout << "c1++ =  " << c1 << endl;
+
+    exit(0);
+}
+
+
+
 int main(int argc, char *argv[])
 {
     cout << "Big number convertor" << endl;
 
-//    {
-//            cout << "Test Big number" << endl;
-//            BigNumber b1 = {1000};
-//            BigNumber c1;
-
-//            b1 += 100;
-//            b1 = b1 + 100;
-
-//            cout << b1 << endl;
-//            c1 = std::move(b1);
-
-//            cout << "b1 =  " << b1 << endl;
-//            cout << "c1 =  " << c1 << endl;
-
-//            return 0;
-//    }
+    //testBigNumber();
 
 	if(argc != 2)
 	{
@@ -145,7 +172,6 @@ int main(int argc, char *argv[])
 		}
 
         //cout << "typeInput=" << typeInput << endl;
-
 		switch(typeInput)
 		{
 			case TypeNumbSystem::TYPE_NONE:

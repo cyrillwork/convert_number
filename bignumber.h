@@ -33,7 +33,7 @@ public:
 
     void print() const;
 
-    int size() { return count_num; }
+    int size() const { return count_num; }
 
     BigNumber& operator*(BigNumber const &v1);
 
@@ -52,13 +52,28 @@ public:
         return pNumber[i];
     }
 
+    const int& operator[] (int i) const
+    {
+        return pNumber[i];
+    }
+
     void swap(BigNumber &b)
     {
         std::swap(count_num, b.count_num);
         std::swap(pNumber, b.pNumber);
     }
 
+    const BigNumber & operator ++ ();
+    const BigNumber operator ++ (int);
+
     const BigNumber& operator += (const BigNumber &v1);
+
+    friend bool operator < (const BigNumber &v1, const BigNumber &v2);
+    friend bool operator > (const BigNumber &v1, const BigNumber &v2);
+    friend bool operator == (const BigNumber &v1, const BigNumber &v2);
+    friend bool operator != (const BigNumber &v1, const BigNumber &v2);
+    friend bool operator >= (const BigNumber &v1, const BigNumber &v2);
+    friend bool operator <= (const BigNumber &v1, const BigNumber &v2);
 
     friend BigNumber operator+(const BigNumber &v1, const BigNumber &v2);
 

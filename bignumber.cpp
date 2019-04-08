@@ -5,22 +5,17 @@ BigNumber::BigNumber(const string&str1)
     if(str1.size() == 0) return;
 
     int len = str1.size();
-
     count_num = 0;
 
     if(len > 0)
     {
         count_num = len;
-
-        pNumber = new int[count_num];
-
+        pNumber = new numType[count_num];
         for(int iii = 0; iii<count_num; iii++)
         {
             pNumber[iii] = str1[count_num - iii - 1] - 48;
         }
-
     }
-
 }
 
 BigNumber::BigNumber(int numb)
@@ -30,7 +25,7 @@ BigNumber::BigNumber(int numb)
     sprintf(str1, "%d", numb);
 
     count_num = static_cast<int>(strlen(str1));
-    pNumber = new int[count_num];
+    pNumber = new numType[count_num];
 
     for(int iii = 0; iii<count_num; iii++)
     {
@@ -42,7 +37,7 @@ BigNumber::BigNumber(int numb)
 BigNumber::BigNumber(const BigNumber&v1)
 {
     count_num = v1.count_num;
-    pNumber = new int[count_num];
+    pNumber = new numType[count_num];
     for(int iii = 0; iii < count_num; iii++)
     {
         pNumber[iii] = v1.pNumber[iii];
@@ -52,7 +47,7 @@ BigNumber::BigNumber(const BigNumber&v1)
 BigNumber::BigNumber(int*b1, int c)
 {
     this->count_num = c;
-    pNumber = new int[count_num];
+    pNumber = new numType[count_num];
     for(int iii = 0; iii < this->count_num; iii++)
     {
         pNumber[iii] = b1[iii];
@@ -65,7 +60,7 @@ BigNumber::~BigNumber()
 }
 
 
-void BigNumber::setData(int *ptr, int len)
+void BigNumber::setData(numType*ptr, int len)
 {
     this->count_num = len;
 
@@ -78,7 +73,7 @@ void BigNumber::setData(int *ptr, int len)
 
     if(len > 0)
     {
-        pNumber = new int[count_num];
+        pNumber = new numType[count_num];
         for(int iii = 0; iii < this->count_num; iii++)
         {
             pNumber[iii] = ptr[iii];
@@ -106,16 +101,51 @@ void BigNumber::setString(char *str1)
 //Перегрузка операции вывода в поток
 ostream& operator << (ostream &s, const BigNumber &b)
 {
-    int len = b.count_num;
-
-    if(len == 0)
+    switch(b.printFormat)
     {
-        s << len;
-    }
+        case BigNumber::PrintFormat::DEC:
+        {
+            int len = b.count_num;
 
-    for(int iii = 0; iii<len; iii++)
-    {
-        s << b.pNumber[len - iii - 1];
+            if(len == 0)
+            {
+                s << len;
+            }
+            for(int iii = 0; iii<len; iii++)
+            {
+                s << static_cast<int>(b.pNumber[len - iii - 1]);
+            }
+        }
+        break;
+
+        case BigNumber::PrintFormat::BIN:
+        {
+            int len = b.count_num;
+            for(int j = 0; j < len; ++j)
+            {
+                bool first = false;
+                BigNumber::numType num = b.pNumber[j];
+                for(int i = sizeof(BigNumber::numType)*8 ; i >= 0; i--)
+                {
+                    if( num & (1<<i) )
+                    {
+                        s << "1";
+                        first = true;
+                    }
+                    else
+                    {
+                        if(first) s << "0";
+                    }
+                }
+            }
+        }
+        break;
+
+        case BigNumber::PrintFormat::HEX:
+        {
+
+        }
+        break;
     }
 
     return s;
@@ -135,10 +165,10 @@ void BigNumber::print() const
 BigNumber& BigNumber::operator*(BigNumber const &v1)
 {
     int len;
-    int *arr1;
+    numType *arr1;
 
     len = v1.count_num + this->count_num + 1;
-    arr1 = new int[len];
+    arr1 = new numType[len];
 
     for(int iii=0; iii<len; iii++)
     {
@@ -184,7 +214,7 @@ BigNumber& BigNumber::operator = (BigNumber const &v1)
 			delete []this->pNumber;
 		}
 		
-		this->pNumber = new int[this->count_num];
+		this->pNumber = new numType[this->count_num];
 		
 		for(int iii = 0; iii < count_num; iii++)
 		{
@@ -197,13 +227,13 @@ BigNumber& BigNumber::operator = (BigNumber const &v1)
 BigNumber operator / (BigNumber const &v1, int const &n)
 {
     int len;
-    int *arr1;
+    BigNumber::numType *arr1;
     int osn = 10;
     int ost =0;
 
     BigNumber result;
     len = v1.count_num;
-    arr1 = new int[len];
+    arr1 = new BigNumber::numType[len];
 
     for(int iii=0; iii<len; iii++)
     {
@@ -234,13 +264,13 @@ BigNumber operator / (BigNumber const &v1, int const &n)
 int operator%(BigNumber const &v1, int const &n)
 {
     int len;
-    int *arr1;
+    BigNumber::numType *arr1;
     int osn = 10;
     int ost =0;
 
     BigNumber result;
     len = v1.count_num;
-    arr1 = new int[len];
+    arr1 = new BigNumber::numType[len];
 
     for(int iii=0; iii<len; iii++)
     {
@@ -325,8 +355,8 @@ const BigNumber& BigNumber::operator += (const BigNumber&v1)
     BigNumber &v2 = *this;
 
     int len = 0;
-    int *arr1;
-    int *arr2;
+    BigNumber::numType *arr1;
+    BigNumber::numType *arr2;
 
     if(v2.count_num > v1.count_num)
     {
@@ -337,8 +367,8 @@ const BigNumber& BigNumber::operator += (const BigNumber&v1)
         len = v1.count_num + 1;
     }
 
-    arr1 = new int[len];
-    arr2 = new int[len];
+    arr1 = new BigNumber::numType[len];
+    arr2 = new BigNumber::numType[len];
 
     for(int iii=0; iii<len; ++iii)
     {
@@ -372,6 +402,11 @@ const BigNumber& BigNumber::operator += (const BigNumber&v1)
     delete []arr2;
 
     return *this;
+}
+
+void BigNumber::setPrintFormat(const PrintFormat& value)
+{
+    printFormat = value;
 }
 
 bool operator !=(const BigNumber &v1, const BigNumber &v2)

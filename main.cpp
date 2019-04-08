@@ -106,9 +106,12 @@ void printNumbers()
 void testBigNumber()
 {
     cout << "Test Big number" << endl;
-    BigNumber a1 = {226};
-    BigNumber aa1 = {226};
-    BigNumber b1 = {1000};
+
+    BigNumber a1    = {226};
+    BigNumber aa1   = {226};
+    BigNumber b1    = {1000};
+    BigNumber bb1    = {10};
+
     BigNumber c1;
 
     b1 += 100;
@@ -135,10 +138,14 @@ void testBigNumber()
     cout << "a1<=aa1 =  " << (a1 <= aa1) << endl;
 
     cout << "++c1 =  " << ++c1 << endl;
-
     c1++;
 
     cout << "c1++ =  " << c1 << endl;
+
+
+    bb1.setPrintFormat(BigNumber::PrintFormat::BIN);
+
+    cout << "bb1 =  " << bb1 << endl;
 
     exit(0);
 }
@@ -150,6 +157,7 @@ int main(int argc, char *argv[])
     cout << "Big number convertor" << endl;
 
     //testBigNumber();
+    //return 0;
 
 	if(argc != 2)
 	{

@@ -13,6 +13,16 @@ using namespace std;
 class BigNumber
 {
 public:
+
+    using numType = unsigned char;
+
+    enum class PrintFormat
+    {
+        DEC = 0,
+        BIN,
+        HEX
+    };
+
     BigNumber() = default;
 
     BigNumber(const string& str1);
@@ -27,7 +37,7 @@ public:
 
     ~BigNumber();
 
-    void setData(int *ptr, int len);
+    void setData(numType *ptr, int len);
 
     void setString(char *str1);
 
@@ -47,12 +57,12 @@ public:
 
     BigNumber& operator^(int range);
 
-    int& operator[] (int i)
+    BigNumber::numType& operator[] (int i)
     {
         return pNumber[i];
     }
 
-    const int& operator[] (int i) const
+    const BigNumber::numType& operator[] (int i) const
     {
         return pNumber[i];
     }
@@ -67,6 +77,7 @@ public:
     const BigNumber operator ++ (int);
 
     const BigNumber& operator += (const BigNumber &v1);
+
 
     friend bool operator < (const BigNumber &v1, const BigNumber &v2);
     friend bool operator > (const BigNumber &v1, const BigNumber &v2);
@@ -83,9 +94,15 @@ public:
 
     friend int operator%(const BigNumber &v1, const int &n);
 
+
+
+    void setPrintFormat(const PrintFormat&value);
+
 private:
     int count_num = 0;
-    int *pNumber = nullptr;
+    numType *pNumber = nullptr;
+
+    PrintFormat printFormat = PrintFormat::DEC;
 };
 
 

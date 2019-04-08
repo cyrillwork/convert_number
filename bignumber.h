@@ -2,8 +2,10 @@
 #define BIGNUMBER_H
 
 #include <iostream>
-#include <cstring>
-#include <cstdio>
+#include <algorithm>
+#include <string>
+//#include <cstring>
+//#include <cstdio>
 
 using namespace std;
 
@@ -16,7 +18,7 @@ public:
 
     using numType = unsigned char;
 
-    enum class PrintFormat
+    enum class NumbSystem
     {
         DEC = 0,
         BIN,
@@ -25,7 +27,7 @@ public:
 
     BigNumber() = default;
 
-    BigNumber(const string& str1);
+    BigNumber(const string& str1, NumbSystem system = NumbSystem::DEC);
 
     BigNumber(int numb);
 
@@ -41,9 +43,15 @@ public:
 
     void setString(char *str1);
 
+    void getDecString(string &strDec) const;
+
+    void getBinString(string &strBin) const;
+
+    void getHexString(string &strHex) const;
+
     void print() const;
 
-    int size() const { return count_num; }
+    int size() const noexcept { return count_num; }
 
     BigNumber& operator*(BigNumber const &v1);
 
@@ -67,7 +75,7 @@ public:
         return pNumber[i];
     }
 
-    void swap(BigNumber &b)
+    void swap(BigNumber &b) noexcept
     {
         std::swap(count_num, b.count_num);
         std::swap(pNumber, b.pNumber);
@@ -96,13 +104,13 @@ public:
 
 
 
-    void setPrintFormat(const PrintFormat&value);
+    void setPrintFormat(const NumbSystem&value);
 
 private:
     int count_num = 0;
     numType *pNumber = nullptr;
 
-    PrintFormat printFormat = PrintFormat::DEC;
+    NumbSystem printFormat = NumbSystem::DEC;
 };
 
 

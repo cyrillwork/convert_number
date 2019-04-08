@@ -1,30 +1,102 @@
 #include "bignumber.h"
 
-BigNumber::BigNumber(const string&str1)
+BigNumber::BigNumber(const string&str1, NumbSystem system)
 {
     if(str1.size() == 0) return;
 
-    int len = str1.size();
-    count_num = 0;
-
-    if(len > 0)
+    switch(system)
     {
-        count_num = len;
-        pNumber = new numType[count_num];
-        for(int iii = 0; iii<count_num; iii++)
+        case NumbSystem::DEC:
         {
-            pNumber[iii] = str1[count_num - iii - 1] - 48;
+            int len = str1.length();
+            count_num = 0;
+
+            if(len > 0)
+            {
+                count_num = len;
+                pNumber = new numType[count_num];
+                for(int iii = 0; iii<count_num; iii++)
+                {
+                    pNumber[iii] = str1[count_num - iii - 1] - 48;
+                }
+            }
         }
-    }
+        break;
+
+        case NumbSystem::BIN:
+        {
+            BigNumber num_res;
+            BigNumber num_res1;
+
+            int off1 = 0;
+
+			for(int iii = str1.length() - 1; iii >= 0; --iii)
+			{
+				int ddd = 0;
+
+				ddd = str1[iii] - 48;
+
+				if(ddd == 1)
+				{
+					BigNumber num_2("2");
+					num_res1 = num_2^off1;
+					num_res += num_res1;
+
+				}
+				off1++;
+			}
+
+            *this = num_res;
+        }
+        break;
+
+        case NumbSystem::HEX:
+        {
+            BigNumber num_res;
+            BigNumber num_res1;
+
+            int off1 = 0;
+
+			for(int iii = str1.length() - 1; iii >= 2; iii--)
+			{
+				char ch1 = str1[iii];
+				int ddd = 0;
+
+				if (('a' <= ch1) && (ch1 <= 'f'))
+				{
+					ddd = 10 + str1[iii] - 97;
+				}
+				else
+				{
+					ddd = str1[iii] - 48;
+				}
+				if(ddd > 0)
+				{
+					BigNumber num_res3;
+					BigNumber num_res2(ddd);
+					BigNumber num_16((char *)"16");
+
+					num_res1 = num_16^off1;
+					num_res3 = num_res2 * num_res1;
+					num_res +=  num_res3;
+				}
+				off1++;
+			}
+			*this = num_res;
+		}
+		break;
+
+	}
 }
 
 BigNumber::BigNumber(int numb)
 {
-    char str1[256];
-    str1[0] = 0;
-    sprintf(str1, "%d", numb);
+    //char str1[256];
+    //str1[0] = 0;
+    //sprintf(str1, "%d", numb);
+    string str1 = std::to_string(numb);
 
-    count_num = static_cast<int>(strlen(str1));
+    count_num = static_cast<int>(str1.size());
     pNumber = new numType[count_num];
 
     for(int iii = 0; iii<count_num; iii++)
@@ -98,12 +170,96 @@ void BigNumber::setString(char *str1)
     *(str1 + iii) = 0;
 }
 
+void BigNumber::getDecString(string& strDec) const
+{
+    strDec.clear();
+    strDec.reserve(count_num);
+
+    for(int iii = 0; iii<count_num; iii++)
+    {
+        strDec += static_cast<char>(pNumber[this->count_num - iii - 1] + 48);
+    }
+}
+
+void BigNumber::getBinString(string& strBin) const
+{
+    int ost = 0;
+    BigNumber num1 = {*this};
+    BigNumber num2;
+
+    strBin.clear();
+    strBin.reserve(this->count_num * 4);
+
+    for(;;)
+    {
+        num2 = num1/2;
+        ost = num1%2;
+
+        if(ost)
+        {
+            strBin += "1";
+        }
+        else
+        {
+            strBin += "0";
+        }
+
+        if(num2.size() == 0)
+        {
+            break;
+        }
+        num1 = num2;
+    }
+    strBin += "b";
+    std::reverse(strBin.begin(), strBin.end());
+
+}
+
+void BigNumber::getHexString(string& strHex) const
+{
+	int ost = 0;
+
+	BigNumber num1 = {*this};
+	BigNumber num2;
+
+    strHex.clear();
+    strHex.reserve(this->count_num + 2);
+
+
+	for(;;)
+	{
+		char str2[8];
+		num2	= num1/16;
+		ost		= num1%16;
+
+		if(ost > 9)
+		{
+			char str1[] = {'a', 'b', 'c', 'd', 'e', 'f'};
+			sprintf(str2, "%c", str1[ost - 10]);
+		}
+		else
+		{
+			sprintf(str2, "%d", ost);
+		}
+
+		strHex += str2;
+
+		if(num2.size() == 0)
+		{
+			break;
+		}
+		num1 = num2;
+	}
+	strHex += "x0";
+	std::reverse(strHex.begin(), strHex.end());
+}
+
 //Перегрузка операции вывода в поток
 ostream& operator << (ostream &s, const BigNumber &b)
 {
     switch(b.printFormat)
     {
-        case BigNumber::PrintFormat::DEC:
+        case BigNumber::NumbSystem::DEC:
         {
             int len = b.count_num;
 
@@ -118,36 +274,23 @@ ostream& operator << (ostream &s, const BigNumber &b)
         }
         break;
 
-        case BigNumber::PrintFormat::BIN:
+        case BigNumber::NumbSystem::BIN:
         {
-            int len = b.count_num;
-            for(int j = 0; j < len; ++j)
-            {
-                bool first = false;
-                BigNumber::numType num = b.pNumber[j];
-                for(int i = sizeof(BigNumber::numType)*8 ; i >= 0; i--)
-                {
-                    if( num & (1<<i) )
-                    {
-                        s << "1";
-                        first = true;
-                    }
-                    else
-                    {
-                        if(first) s << "0";
-                    }
-                }
-            }
+            string strBin;
+            b.getBinString(strBin);
+            s << strBin;
+
         }
         break;
 
-        case BigNumber::PrintFormat::HEX:
+        case BigNumber::NumbSystem::HEX:
         {
-
+            string strHex;
+            b.getHexString(strHex);
+            s << strHex;
         }
         break;
     }
-
     return s;
 }
 
@@ -404,7 +547,7 @@ const BigNumber& BigNumber::operator += (const BigNumber&v1)
     return *this;
 }
 
-void BigNumber::setPrintFormat(const PrintFormat& value)
+void BigNumber::setPrintFormat(const NumbSystem& value)
 {
     printFormat = value;
 }

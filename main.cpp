@@ -1,11 +1,7 @@
-#include <iostream>
-
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <algorithm>
-
 #include "bignumber.h"
+
+#include <cctype>
+#include <memory>
 
 using namespace std;
 
@@ -21,13 +17,15 @@ enum class TypeNumbSystem
 //тип введеного числа
 TypeNumbSystem typeInput = TypeNumbSystem::TYPE_NONE;
 
-int checkNumber(char *strNumber)
+int checkNumber(string strNumber)
 {
+    unsigned int length = strNumber.length();
     //cout << "check number: "<< strNumber << endl;
-	if((strlen(strNumber) > 1)&&(strNumber[0] == 'b'))
+
+	if((length > 1) && (strNumber[0] == 'b'))
 	{
 		cout << "You input binary number"<< endl;
-		for(unsigned int i=1; i<strlen(strNumber); i++)
+		for(unsigned int i=1; i<length; i++)
 		{
 			if (!((strNumber[i] == '0')||(strNumber[i] == '1')))
 			{
@@ -39,10 +37,11 @@ int checkNumber(char *strNumber)
 		typeInput = TypeNumbSystem::TYPE_BIN;
 	}
 	else
-		if( (strlen(strNumber) > 2) && ((strNumber[0] == '0')&&(strNumber[1] == 'x')) )
+		if( (length > 2) && ((strNumber[0] == '0') && (strNumber[1] == 'x')) )
 		{
 		cout << "You input hex number"<< endl;
-		for(unsigned int i=2; i<strlen(strNumber); i++)
+
+		for(unsigned int i = 2; i < length; i++)
 		{
 			if(isxdigit(strNumber[i]) == 0)
 			{
@@ -55,7 +54,7 @@ int checkNumber(char *strNumber)
 	}
 	else
 	{
-		for(unsigned int i=0; i<strlen(strNumber); i++)
+		for(unsigned int i=0; i<length; i++)
 		{
 			if(isdigit(strNumber[i]) == 0)
 			{
@@ -66,6 +65,8 @@ int checkNumber(char *strNumber)
 		}
 		typeInput = TypeNumbSystem::TYPE_DEC;
 	}
+	//cout << "typeInput = "<< (int)typeInput << endl;
+
 	return 0;
 }
 
@@ -107,7 +108,6 @@ void testBigNumber()
 
     cout << "++c1 =  " << ++c1 << endl;
     c1++;
-
     cout << "c1++ =  " << c1 << endl;
 
     bb1.setPrintFormat(BigNumber::NumbSystem::DEC);
@@ -124,7 +124,7 @@ void testBigNumber()
 
 int main(int argc, char *argv[])
 {
-    BigNumber *gNumber = nullptr;
+    auto gNumber = make_shared<BigNumber>();
 
     cout << "Big number convertor" << endl;
 
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     }
 	else
 	{
-		if(strlen(argv[1]) > 255)
+		if(string(argv[1]).length() > 255)
 		{
 			cout << "!!! Error max size 255 chars" << endl;
 			return 0;
@@ -162,19 +162,19 @@ int main(int argc, char *argv[])
 			{				
 				++ptr1;
 
-				gNumber = new BigNumber(ptr1, BigNumber::NumbSystem::BIN);
+				gNumber = make_shared<BigNumber>(ptr1, BigNumber::NumbSystem::BIN);
 			}
 			break;
 
 			case TypeNumbSystem::TYPE_DEC:
 			{
-				gNumber = new BigNumber(ptr1, BigNumber::NumbSystem::BIN);
+				gNumber = make_shared<BigNumber>(ptr1, BigNumber::NumbSystem::DEC);
 			}
 			break;
 
 			case TypeNumbSystem::TYPE_HEX:
 			{
-				gNumber = new BigNumber(ptr1, BigNumber::NumbSystem::HEX);
+				gNumber = make_shared<BigNumber>(ptr1, BigNumber::NumbSystem::HEX);
 
 			}
 			break;
@@ -188,9 +188,6 @@ int main(int argc, char *argv[])
 			cout << "decimal     = " << *gNumber << endl;
 			gNumber->setPrintFormat(BigNumber::NumbSystem::HEX);
 			cout << "hexadecimal = " << *gNumber << endl;
-
-			delete gNumber;
-
 		}
 	}
 

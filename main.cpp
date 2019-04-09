@@ -9,13 +9,6 @@
 
 using namespace std;
 
-const int MAX_MASS = 256;
-
-//символьные массивы содержащие числа в символьном виде
-char numHex[MAX_MASS];
-char numDec[MAX_MASS];
-char numBin[MAX_MASS];
-
 //тип введеного числа
 enum class TypeNumbSystem
 {
@@ -27,26 +20,6 @@ enum class TypeNumbSystem
 
 //тип введеного числа
 TypeNumbSystem typeInput = TypeNumbSystem::TYPE_NONE;
-
-//Функция вывода на печать числа в двоичной системе счисления
-void printBinNumber(long long int num)
-{
-	printf("bin = ");
-	bool first = false;
-	for(int i = 31; i >= 0; i--)
-	{
-		if( num & (1<<i) )
-		{
-			printf("1");
-			first = true;
-		}
-		else
-		{
-			if(first) printf("0");
-		}
-	}
-	printf("\n");
-}
 
 int checkNumber(char *strNumber)
 {
@@ -96,12 +69,7 @@ int checkNumber(char *strNumber)
 	return 0;
 }
 
-void printNumbers()
-{
-	printf("bin = %s\n", numBin);
-	printf("dec = %s\n", numDec);
-	printf("hex = %s\n", numHex);
-}
+
 
 void testBigNumber()
 {
@@ -156,6 +124,8 @@ void testBigNumber()
 
 int main(int argc, char *argv[])
 {
+    BigNumber *gNumber = nullptr;
+
     cout << "Big number convertor" << endl;
 
     //testBigNumber();
@@ -166,13 +136,13 @@ int main(int argc, char *argv[])
 		cout << "!!! Error input" << endl;
         cout << "Usage: convertor [number]" << endl;
         cout << "Number format: dec - [1..9], bin [b0..1], hex [0x1..f]" << endl;
-        cout << "Max size number 30 symbols" << endl;
+        cout << "Max size number 255 symbols" << endl;
     }
 	else
 	{
-		if(strlen(argv[1]) > 30)
+		if(strlen(argv[1]) > 255)
 		{
-			cout << "!!! Error max size 30 chars" << endl;
+			cout << "!!! Error max size 255 chars" << endl;
 			return 0;
 		}
 
@@ -183,7 +153,6 @@ int main(int argc, char *argv[])
 
 		char *ptr1 = argv[1];
 
-        //cout << "typeInput=" << typeInput << endl;
 		switch(typeInput)
 		{
 			case TypeNumbSystem::TYPE_NONE:
@@ -193,56 +162,36 @@ int main(int argc, char *argv[])
 			{				
 				++ptr1;
 
-				BigNumber num1(ptr1, BigNumber::NumbSystem::BIN);
-
-				string strBin;
-				string strHex;
-				string strDec;
-
-				num1.getBinString(strBin);
-				num1.getHexString(strHex);
-				num1.getDecString(strDec);
-
-				strcpy(numBin, strBin.c_str());
-				strcpy(numHex, strHex.c_str());
-				strcpy(numDec, strDec.c_str());
+				gNumber = new BigNumber(ptr1, BigNumber::NumbSystem::BIN);
 			}
 			break;
 
 			case TypeNumbSystem::TYPE_DEC:
 			{
-				BigNumber num1(ptr1);
-				string strBin;
-				string strHex;
-
-				num1.getBinString(strBin);
-				num1.getHexString(strHex);
-
-				strcpy(numDec, ptr1);
-				strcpy(numBin, strBin.c_str());
-				strcpy(numHex, strHex.c_str());
-
+				gNumber = new BigNumber(ptr1, BigNumber::NumbSystem::BIN);
 			}
 			break;
 
 			case TypeNumbSystem::TYPE_HEX:
 			{
-				BigNumber num1(ptr1, BigNumber::NumbSystem::HEX);
+				gNumber = new BigNumber(ptr1, BigNumber::NumbSystem::HEX);
 
-				string strBin;
-				string strDec;
-
-				num1.getBinString(strBin);
-				num1.getDecString(strDec);
-
-				strcpy(numHex, ptr1);
-				strcpy(numBin, strBin.c_str());
-				strcpy(numDec, strDec.c_str());
 			}
 			break;
 		}
 
-		printNumbers();
+		if(gNumber)
+		{
+			gNumber->setPrintFormat(BigNumber::NumbSystem::BIN);
+			cout << "binary      = " << *gNumber << endl;
+			gNumber->setPrintFormat(BigNumber::NumbSystem::DEC);
+			cout << "decimal     = " << *gNumber << endl;
+			gNumber->setPrintFormat(BigNumber::NumbSystem::HEX);
+			cout << "hexadecimal = " << *gNumber << endl;
+
+			delete gNumber;
+
+		}
 	}
 
 	return 0;

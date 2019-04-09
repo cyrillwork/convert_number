@@ -43,11 +43,11 @@ public:
 
     void setString(char *str1);
 
-    void getDecString(string &strDec) const;
+    string getDecString() const;
 
-    void getBinString(string &strBin) const;
+    string getBinString() const;
 
-    void getHexString(string &strHex) const;
+    string getHexString() const;
 
     void print() const;
 
@@ -101,8 +101,6 @@ public:
     friend ostream& operator << (ostream &s, const BigNumber &b);
 
     friend int operator%(const BigNumber &v1, const int &n);
-
-
 
     void setPrintFormat(const NumbSystem&value);
 

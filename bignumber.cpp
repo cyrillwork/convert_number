@@ -170,24 +170,26 @@ void BigNumber::setString(char *str1)
     *(str1 + iii) = 0;
 }
 
-void BigNumber::getDecString(string& strDec) const
+string BigNumber::getDecString() const
 {
-    strDec.clear();
+    string strDec;
     strDec.reserve(count_num);
 
     for(int iii = 0; iii<count_num; iii++)
     {
         strDec += static_cast<char>(pNumber[this->count_num - iii - 1] + 48);
     }
+
+    return strDec;
 }
 
-void BigNumber::getBinString(string& strBin) const
+string BigNumber::getBinString() const
 {
     int ost = 0;
     BigNumber num1 = {*this};
     BigNumber num2;
+    string      strBin;
 
-    strBin.clear();
     strBin.reserve(this->count_num * 4);
 
     for(;;)
@@ -211,18 +213,20 @@ void BigNumber::getBinString(string& strBin) const
         num1 = num2;
     }
     strBin += "b";
+
     std::reverse(strBin.begin(), strBin.end());
 
+    return strBin;
 }
 
-void BigNumber::getHexString(string& strHex) const
+string BigNumber::getHexString() const
 {
 	int ost = 0;
 
 	BigNumber num1 = {*this};
 	BigNumber num2;
 
-    strHex.clear();
+    string strHex;
     strHex.reserve(this->count_num + 2);
 
 
@@ -252,6 +256,8 @@ void BigNumber::getHexString(string& strHex) const
 	}
 	strHex += "x0";
 	std::reverse(strHex.begin(), strHex.end());
+
+	return strHex;
 }
 
 //Перегрузка операции вывода в поток
@@ -261,33 +267,19 @@ ostream& operator << (ostream &s, const BigNumber &b)
     {
         case BigNumber::NumbSystem::DEC:
         {
-            int len = b.count_num;
-
-            if(len == 0)
-            {
-                s << len;
-            }
-            for(int iii = 0; iii<len; iii++)
-            {
-                s << static_cast<int>(b.pNumber[len - iii - 1]);
-            }
+            s << b.getDecString();
         }
         break;
 
         case BigNumber::NumbSystem::BIN:
         {
-            string strBin;
-            b.getBinString(strBin);
-            s << strBin;
-
+            s << b.getBinString();
         }
         break;
 
         case BigNumber::NumbSystem::HEX:
-        {
-            string strHex;
-            b.getHexString(strHex);
-            s << strHex;
+        {                        
+            s << b.getHexString();
         }
         break;
     }

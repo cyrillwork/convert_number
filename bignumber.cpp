@@ -263,6 +263,12 @@ string BigNumber::getHexString() const
 //Перегрузка операции вывода в поток
 ostream& operator << (ostream &s, const BigNumber &b)
 {
+    if(b.count_num == 0)
+    {
+        s << "0";
+        return s;
+    }
+
     switch(b.printFormat)
     {
         case BigNumber::NumbSystem::DEC:

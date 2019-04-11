@@ -80,7 +80,6 @@ void testBigNumber()
     BigNumber aa1   = {226};
     BigNumber b1    = {1000};
     BigNumber bb1    = {255};
-
     BigNumber c1;
 
     b1 += 100;
@@ -120,6 +119,22 @@ void testBigNumber()
     exit(0);
 }
 
+void testBigNumber2()
+{
+    cout << "Test Big number 2" << endl;
+    BigNumber a(10);
+    BigNumber b(20);
+    BigNumber c(30);
+    BigNumber d;
+
+    d = a + b + c;
+    cout << "a = " << a << endl;
+    cout << "b = " << b << endl;
+    cout << "c = " << c << endl;
+
+    cout << "d=(a + b + c)=" << d << endl;
+}
+
 
 
 int main(int argc, char *argv[])
@@ -129,6 +144,7 @@ int main(int argc, char *argv[])
     cout << "Big number convertor" << endl;
 
     //testBigNumber();
+    //testBigNumber2();
     //return 0;
 
 	if(argc != 2)

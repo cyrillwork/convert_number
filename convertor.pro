@@ -13,6 +13,9 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp \
-    bignumber.cpp
-HEADERS += bignumber.h
+INCLUDEPATH += $${_PRO_FILE_PWD_}/depends/BigNumber
+
+SOURCES += main.cpp
+HEADERS +=
+
+LIBS += depends/BigNumber/bignumber.o
